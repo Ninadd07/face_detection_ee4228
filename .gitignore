@@ -1,0 +1,29 @@
+# Python venv
+.venv/
+env/
+venv/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+
+# VS Code
+.vscode/
+
+# Logs and temp files
+*.log
+*.tmp
+
+# Data/output
+*.npy
+*.npz
+*.pkl
+outputs/
+runs/
+
+# OS junk
+.DS_Store
+
+#Data (videos)
+data_raw/videos/*
