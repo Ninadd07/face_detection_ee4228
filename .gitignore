@@ -27,3 +27,6 @@ runs/
 
 #Data (videos)
 data_raw/videos/*
+# Augmented data output (generated images)
+augmented_data/images/
+augmented_data/.venv/
