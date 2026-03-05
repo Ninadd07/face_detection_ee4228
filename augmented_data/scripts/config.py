@@ -13,7 +13,7 @@ REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 VIDEO_ROOT = os.path.join(REPO_ROOT, "..", "Training_Videos")
 
 # Output directory for cropped face images
-IMAGE_OUTPUT_ROOT = os.path.join(REPO_ROOT, "augmented_data", "images")
+IMAGE_OUTPUT_ROOT = os.path.join(REPO_ROOT, "augmented_data", "training_images_augmented")
 
 # ─── GPU / Model ─────────────────────────────────────────────────────────────
 # Which GPU to use for InsightFace face detection (0-indexed)

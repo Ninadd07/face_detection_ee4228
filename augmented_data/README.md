@@ -6,8 +6,8 @@ This module handles **dataset preprocessing** for the EE4228 face detection proj
 
 | Stage | Description | Output |
 |-------|-------------|--------|
-| **Stage 1** — Frame Sampling | Extracts frames from videos, detects & crops faces using InsightFace, filters blurry frames | `images/<Person>/raw_*.jpg` |
-| **Stage 2** — Augmentation | Applies geometric, photometric, occlusion, and weather augmentations to reach target count | `images/<Person>/aug_*.jpg` |
+| **Stage 1** — Frame Sampling | Extracts frames from videos, detects & crops faces using InsightFace, filters blurry frames | `training_images_augmented/<Person>/raw_*.jpg` |
+| **Stage 2** — Augmentation | Applies geometric, photometric, occlusion, and weather augmentations to reach target count | `training_images_augmented/<Person>/aug_*.jpg` |
 
 ## Pipeline Summary
 
@@ -20,7 +20,7 @@ Training_Videos/<Person>/*.mp4          (Input: 3–6 videos per person)
         │  - Laplacian blur filtering on cropped face
         │  - Face cropping with 70% padding → 200×200 JPEG
         │
-images/<Person>/raw_vid{i}_frame{n}.jpg  (150 raw images per person)
+training_images_augmented/<Person>/raw_vid{i}_frame{n}.jpg  (150 raw images per person)
         │
         ▼  Stage 2: augmentor.py
         │  - Geometric: flip, rotation ±15°, affine scale/translate
@@ -28,7 +28,7 @@ images/<Person>/raw_vid{i}_frame{n}.jpg  (150 raw images per person)
         │  - Occlusion: random rectangular erasing (CoarseDropout)
         │  - Weather: rain streaks, snow particles, fog/haze overlay
         │
-images/<Person>/aug_*.jpg                (450 augmented per person)
+training_images_augmented/<Person>/aug_*.jpg                (450 augmented per person)
         │
         ▼  Final output
 600 face images per person, 4200 total across 7 members
@@ -46,7 +46,7 @@ augmented_data/
 │   ├── augmentor.py         ← Stage 2: face crops → augmented dataset
 │   ├── pipeline.py          ← Master script (runs both stages)
 │   └── requirements.txt     ← Python dependencies
-└── images/                  ← Generated output (gitignored)
+└── training_images_augmented/           ← Generated output (gitignored)
     ├── Abhiram/
     │   ├── raw_vid0_frame00030.jpg
     │   ├── aug_vid0_frame00030_geometric_0001.jpg
@@ -135,7 +135,7 @@ All parameters are in [`scripts/config.py`](scripts/config.py):
 - **Naming convention:**
   - Raw: `raw_vid{video_index}_frame{frame_number:05d}.jpg`
   - Augmented: `aug_{base_id}_{category}_{index:04d}.jpg`
-- **Organization:** One folder per person under `images/`
+- **Organization:** One folder per person under `training_images_augmented/`
 
 ## Dependencies
 
@@ -174,3 +174,23 @@ This pipeline was developed for the MLDA GPU server (gpu8):
 
 - **Total pipeline time:** ~167 seconds (Stage 1: 161s, Stage 2: 4s)
 - **Single-face filter:** Frames with ≠1 detected face are skipped (ensures clean, single-person crops)
+
+## Accessing the Dataset
+
+The augmented training images are not committed to this repository due to their size. Team members with access can download the dataset from the shared cloud folder:
+
+📁 **[training_images_augmented — OneDrive](https://entuedu-my.sharepoint.com/:f:/r/personal/sasi0006_e_ntu_edu_sg/Documents/ACAD/SEM%203.2/EE4228%20Intelligent%20System%20Design/Assn%202/training_images_augmented?csf=1&web=1&e=nhnhC4)**
+
+Place the downloaded `training_images_augmented/` folder inside `augmented_data/` so the directory structure matches:
+
+```
+augmented_data/
+└── training_images_augmented/
+    ├── Abhiram/
+    ├── Frentzen/
+    ├── Jessica/
+    ├── Ninad/
+    ├── Ryan/
+    ├── Sasi/
+    └── Shreyas/
+```
