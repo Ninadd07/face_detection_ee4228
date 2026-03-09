@@ -3,7 +3,7 @@ import cv2
 import numpy as np
 from insightface.app import FaceAnalysis
 
-VIDEO_ROOT = "video_samples"
+VIDEO_ROOT = "/Users/jessica/Documents/GitHub/face_detection_ee4228/data_raw/videos"
 EMB_ROOT = "embeddings"
 
 def extract_embeddings_from_video(app, video_path, out_dir, frame_step=10, max_embeddings=50):
