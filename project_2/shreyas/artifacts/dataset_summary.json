@@ -1,0 +1,24 @@
+{
+  "dataset_dir": "training_images_augmented",
+  "num_classes": 7,
+  "num_non_empty_classes": 7,
+  "classes": [
+    "Abhiram",
+    "Frentzen",
+    "Jessica",
+    "Ninad",
+    "Ryan",
+    "Sasi",
+    "Shreyas"
+  ],
+  "class_image_counts": {
+    "Abhiram": 600,
+    "Frentzen": 600,
+    "Jessica": 600,
+    "Ninad": 600,
+    "Ryan": 600,
+    "Sasi": 600,
+    "Shreyas": 600
+  },
+  "total_images": 4200
+}

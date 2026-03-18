@@ -1,0 +1,6 @@
+numpy<2
+opencv-python
+tensorflow-cpu==2.15.1
+keras==2.15.0
+keras-applications
+keras-vggface
