@@ -1,89 +1,47 @@
-"""
-config.py
-
-Central configuration for the ArcFace + InsightFace model.
-
-This file defines:
-- Folder paths (data, embeddings)
-- Model / detection parameters
-- Embedding extraction parameters
-- Recognition thresholds
-"""
-
 from pathlib import Path
 
-# -----------------------------
-# Root paths
-# -----------------------------
+BASE_DIR = Path(__file__).resolve().parent
 
-# Project root (this file lives in project_2/models/arcface_insightface/)
-PROJECT_ROOT = Path(__file__).resolve().parents[3]
+# Shared raw data outside project_2
+RAW_DATA_DIR = Path("/Users/jessica/Documents/GitHub/face_detection_ee4228/augmented_data/training_images_augmented")  # CHANGE THIS
 
-# Shared raw data folder (used by all models)
-DATA_ROOT = PROJECT_ROOT / "data_raw"
+LOCAL_DATA_DIR = BASE_DIR / "data_augmented"
+SPLIT_DIR = LOCAL_DATA_DIR / "split"
+ENROLL_DIR = SPLIT_DIR / "enroll"
+VAL_DIR = SPLIT_DIR / "val"
+TEST_DIR = SPLIT_DIR / "test"
+UNKNOWN_DIR = LOCAL_DATA_DIR / "unknown"
 
-# Augmented training images produced by GAN:
-# augmented_data/training_images_augmented/<Person>/*.jpg
-AUG_IMG_ROOT = PROJECT_ROOT / "augmented_data/training_images_augmented"
+ARTIFACTS_DIR = BASE_DIR / "artifacts_augmented"
+EMBEDDINGS_DIR = ARTIFACTS_DIR / "embeddings"
+METRICS_DIR = ARTIFACTS_DIR / "metrics"
+LOGS_DIR = ARTIFACTS_DIR / "logs"
 
-# Optional: original training videos, if we still need them
-VIDEO_ROOT = DATA_ROOT / "videos"
+RANDOM_SEED = 42
 
-# Embeddings folder for THIS model only.
-# Each model should have its own embeddings root so they don't clash.
-# Structure:
-#   embeddings_arcface/<Person>/*.npy
-EMB_ROOT = PROJECT_ROOT / "embeddings/embeddings_arcface"
+ENROLL_RATIO = 0.6
+VAL_RATIO = 0.2
+TEST_RATIO = 0.2
 
-
-# -----------------------------
-# InsightFace / detection config
-# -----------------------------
-
-# Detection input size for FaceAnalysis (SCRFD)
-# This is passed into app.prepare(det_size=DET_SIZE)
-DET_SIZE = (640, 640)
-
-# Providers for ONNXRuntime. On Mac (no GPU), CPU is simplest.
-PROVIDERS = ["CPUExecutionProvider"]
-
-
-# -----------------------------
-# Embedding extraction config
-# -----------------------------
-
-# ArcFace typically expects 112x112 aligned face inputs.
-# GAN crops are ~200x200 faces, so we will resize them to 112x112 before feeding to the embedding model.
-ARC_FACE_INPUT_SIZE = (112, 112)  # (width, height)
-
-# When extracting embeddings from videos (if used):
-FRAME_STEP = 10           # sample every Nth frame
-MAX_EMBEDDINGS_PER_VIDEO = 50  # safety cap per video
-
-# When extracting from augmented images, we process all images.
-# We can still define a max cap per person if needed:
-MAX_EMBEDDINGS_PER_PERSON = 600  # Our dataset size per person
-
-
-# -----------------------------
-# Recognition config
-# -----------------------------
-
-# Label used when no person matches above threshold
 UNKNOWN_LABEL = "Unknown"
+DEFAULT_THRESHOLD = 0.45
 
-# Cosine similarity threshold for prototype matching.
-# Typical ArcFace ranges are around 0.6–0.7; tune on your dataset.
-PROTOTYPE_THRESHOLD = 0.6
+IMAGE_EXTS = {".jpg", ".jpeg", ".png", ".bmp", ".webp"}
 
-# If you also experiment with the all-samples method, you can have a
-# slightly different threshold for that (often a bit lower).
-ALL_SAMPLES_THRESHOLD = 0.6
+MODEL_NAME = "buffalo_l"
+DET_SIZE = (640, 640)
+CTX_ID = -1  # use -1 if CPU only
 
-
-# -----------------------------
-# Utility flags / options
-# -----------------------------
-
-# If True, engine prints extra debug info (e.g., loaded persons, shapes).
-DEBUG = True
+for d in [
+    LOCAL_DATA_DIR,
+    SPLIT_DIR,
+    ENROLL_DIR,
+    VAL_DIR,
+    TEST_DIR,
+    UNKNOWN_DIR,
+    ARTIFACTS_DIR,
+    EMBEDDINGS_DIR,
+    METRICS_DIR,
+    LOGS_DIR,
+]:
+    d.mkdir(parents=True, exist_ok=True)

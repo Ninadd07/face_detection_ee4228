@@ -1,0 +1,139 @@
+{
+  "split": "val",
+  "db": "/Users/jessica/Documents/GitHub/face_detection_ee4228/project_2/models/arcface_insightface/artifacts_finetuned/embeddings/finetuned_enroll.npz",
+  "best_threshold": 0.95,
+  "results": [
+    {
+      "num_records": 915,
+      "num_valid": 706,
+      "num_detection_fail": 209,
+      "num_embed_fail": 0,
+      "num_error": 0,
+      "overall_accuracy": 0.8583569405099151,
+      "known_accuracy": 0.9603803486529319,
+      "unknown_rejection_rate": 0.0,
+      "threshold": 0.3
+    },
+    {
+      "num_records": 915,
+      "num_valid": 706,
+      "num_detection_fail": 209,
+      "num_embed_fail": 0,
+      "num_error": 0,
+      "overall_accuracy": 0.8583569405099151,
+      "known_accuracy": 0.9603803486529319,
+      "unknown_rejection_rate": 0.0,
+      "threshold": 0.4
+    },
+    {
+      "num_records": 915,
+      "num_valid": 706,
+      "num_detection_fail": 209,
+      "num_embed_fail": 0,
+      "num_error": 0,
+      "overall_accuracy": 0.8583569405099151,
+      "known_accuracy": 0.9603803486529319,
+      "unknown_rejection_rate": 0.0,
+      "threshold": 0.5
+    },
+    {
+      "num_records": 915,
+      "num_valid": 706,
+      "num_detection_fail": 209,
+      "num_embed_fail": 0,
+      "num_error": 0,
+      "overall_accuracy": 0.8583569405099151,
+      "known_accuracy": 0.9603803486529319,
+      "unknown_rejection_rate": 0.0,
+      "threshold": 0.6
+    },
+    {
+      "num_records": 915,
+      "num_valid": 706,
+      "num_detection_fail": 209,
+      "num_embed_fail": 0,
+      "num_error": 0,
+      "overall_accuracy": 0.8611898016997167,
+      "known_accuracy": 0.9603803486529319,
+      "unknown_rejection_rate": 0.02666666666666667,
+      "threshold": 0.7
+    },
+    {
+      "num_records": 915,
+      "num_valid": 706,
+      "num_detection_fail": 209,
+      "num_embed_fail": 0,
+      "num_error": 0,
+      "overall_accuracy": 0.8640226628895185,
+      "known_accuracy": 0.9572107765451664,
+      "unknown_rejection_rate": 0.08,
+      "threshold": 0.75
+    },
+    {
+      "num_records": 915,
+      "num_valid": 706,
+      "num_detection_fail": 209,
+      "num_embed_fail": 0,
+      "num_error": 0,
+      "overall_accuracy": 0.8611898016997167,
+      "known_accuracy": 0.9492868462757528,
+      "unknown_rejection_rate": 0.12,
+      "threshold": 0.8
+    },
+    {
+      "num_records": 915,
+      "num_valid": 706,
+      "num_detection_fail": 209,
+      "num_embed_fail": 0,
+      "num_error": 0,
+      "overall_accuracy": 0.8597733711048159,
+      "known_accuracy": 0.9381933438985737,
+      "unknown_rejection_rate": 0.2,
+      "threshold": 0.85
+    },
+    {
+      "num_records": 915,
+      "num_valid": 706,
+      "num_detection_fail": 209,
+      "num_embed_fail": 0,
+      "num_error": 0,
+      "overall_accuracy": 0.8597733711048159,
+      "known_accuracy": 0.9286846275752774,
+      "unknown_rejection_rate": 0.28,
+      "threshold": 0.9
+    },
+    {
+      "num_records": 915,
+      "num_valid": 706,
+      "num_detection_fail": 209,
+      "num_embed_fail": 0,
+      "num_error": 0,
+      "overall_accuracy": 0.8555240793201133,
+      "known_accuracy": 0.9096671949286846,
+      "unknown_rejection_rate": 0.4,
+      "threshold": 0.95
+    },
+    {
+      "num_records": 915,
+      "num_valid": 706,
+      "num_detection_fail": 209,
+      "num_embed_fail": 0,
+      "num_error": 0,
+      "overall_accuracy": 0.8257790368271954,
+      "known_accuracy": 0.873217115689382,
+      "unknown_rejection_rate": 0.4266666666666667,
+      "threshold": 0.97
+    },
+    {
+      "num_records": 915,
+      "num_valid": 706,
+      "num_detection_fail": 209,
+      "num_embed_fail": 0,
+      "num_error": 0,
+      "overall_accuracy": 0.6898016997167139,
+      "known_accuracy": 0.7083993660855784,
+      "unknown_rejection_rate": 0.5333333333333333,
+      "threshold": 0.99
+    }
+  ]
+}

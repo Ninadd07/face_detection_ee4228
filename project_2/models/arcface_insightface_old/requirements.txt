@@ -1,0 +1,15 @@
+# Core scientific stack
+numpy<2
+scipy
+
+# Computer vision
+opencv-python
+
+# InsightFace + ONNXRuntime (CPU on Mac)
+insightface
+onnxruntime
+
+# Optional: plotting / notebooks / progress bars for analysis
+matplotlib
+jupyter
+tqdm

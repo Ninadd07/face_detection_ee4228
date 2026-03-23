@@ -1,0 +1,106 @@
+{
+  "split": "val",
+  "db": "/Users/jessica/Documents/GitHub/face_detection_ee4228/project_2/models/arcface_insightface/artifacts/embeddings/baseline_enroll.npz",
+  "best_threshold": 0.35,
+  "results": [
+    {
+      "num_records": 243,
+      "num_valid": 203,
+      "num_detection_fail": 40,
+      "num_embed_fail": 0,
+      "num_error": 0,
+      "overall_accuracy": 0.9950738916256158,
+      "known_accuracy": 1.0,
+      "unknown_rejection_rate": 0.9866666666666667,
+      "threshold": 0.3
+    },
+    {
+      "num_records": 243,
+      "num_valid": 203,
+      "num_detection_fail": 40,
+      "num_embed_fail": 0,
+      "num_error": 0,
+      "overall_accuracy": 1.0,
+      "known_accuracy": 1.0,
+      "unknown_rejection_rate": 1.0,
+      "threshold": 0.35
+    },
+    {
+      "num_records": 243,
+      "num_valid": 203,
+      "num_detection_fail": 40,
+      "num_embed_fail": 0,
+      "num_error": 0,
+      "overall_accuracy": 1.0,
+      "known_accuracy": 1.0,
+      "unknown_rejection_rate": 1.0,
+      "threshold": 0.4
+    },
+    {
+      "num_records": 243,
+      "num_valid": 203,
+      "num_detection_fail": 40,
+      "num_embed_fail": 0,
+      "num_error": 0,
+      "overall_accuracy": 1.0,
+      "known_accuracy": 1.0,
+      "unknown_rejection_rate": 1.0,
+      "threshold": 0.45
+    },
+    {
+      "num_records": 243,
+      "num_valid": 203,
+      "num_detection_fail": 40,
+      "num_embed_fail": 0,
+      "num_error": 0,
+      "overall_accuracy": 1.0,
+      "known_accuracy": 1.0,
+      "unknown_rejection_rate": 1.0,
+      "threshold": 0.5
+    },
+    {
+      "num_records": 243,
+      "num_valid": 203,
+      "num_detection_fail": 40,
+      "num_embed_fail": 0,
+      "num_error": 0,
+      "overall_accuracy": 0.9901477832512315,
+      "known_accuracy": 0.984375,
+      "unknown_rejection_rate": 1.0,
+      "threshold": 0.55
+    },
+    {
+      "num_records": 243,
+      "num_valid": 203,
+      "num_detection_fail": 40,
+      "num_embed_fail": 0,
+      "num_error": 0,
+      "overall_accuracy": 0.9753694581280788,
+      "known_accuracy": 0.9609375,
+      "unknown_rejection_rate": 1.0,
+      "threshold": 0.6
+    },
+    {
+      "num_records": 243,
+      "num_valid": 203,
+      "num_detection_fail": 40,
+      "num_embed_fail": 0,
+      "num_error": 0,
+      "overall_accuracy": 0.9753694581280788,
+      "known_accuracy": 0.9609375,
+      "unknown_rejection_rate": 1.0,
+      "threshold": 0.65
+    },
+    {
+      "num_records": 243,
+      "num_valid": 203,
+      "num_detection_fail": 40,
+      "num_embed_fail": 0,
+      "num_error": 0,
+      "overall_accuracy": 0.9458128078817734,
+      "known_accuracy": 0.9140625,
+      "unknown_rejection_rate": 1.0,
+      "threshold": 0.7
+    }
+  ]
+}

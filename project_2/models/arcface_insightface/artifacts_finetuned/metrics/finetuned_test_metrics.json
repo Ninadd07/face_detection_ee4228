@@ -1,0 +1,15 @@
+{
+  "split": "test",
+  "db": "/Users/jessica/Documents/GitHub/face_detection_ee4228/project_2/models/arcface_insightface/artifacts_finetuned/embeddings/finetuned_enroll.npz",
+  "threshold": 0.9,
+  "metrics": {
+    "num_records": 915,
+    "num_valid": 679,
+    "num_detection_fail": 236,
+    "num_embed_fail": 0,
+    "num_error": 0,
+    "overall_accuracy": 0.8600883652430045,
+    "known_accuracy": 0.9321192052980133,
+    "unknown_rejection_rate": 0.28
+  }
+}

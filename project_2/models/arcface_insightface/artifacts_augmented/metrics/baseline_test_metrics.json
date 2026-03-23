@@ -1,0 +1,15 @@
+{
+  "split": "test",
+  "db": "/Users/jessica/Documents/GitHub/face_detection_ee4228/project_2/models/arcface_insightface/artifacts_augmented/embeddings/baseline_enroll.npz",
+  "threshold": 0.45,
+  "metrics": {
+    "num_records": 915,
+    "num_valid": 679,
+    "num_detection_fail": 236,
+    "num_embed_fail": 0,
+    "num_error": 0,
+    "overall_accuracy": 0.9985272459499264,
+    "known_accuracy": 0.9983443708609272,
+    "unknown_rejection_rate": 1.0
+  }
+}

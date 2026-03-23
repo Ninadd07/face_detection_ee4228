@@ -1,0 +1,106 @@
+{
+  "split": "val",
+  "db": "/Users/jessica/Documents/GitHub/face_detection_ee4228/project_2/models/arcface_insightface/artifacts_augmented/embeddings/baseline_enroll.npz",
+  "best_threshold": 0.3,
+  "results": [
+    {
+      "num_records": 915,
+      "num_valid": 706,
+      "num_detection_fail": 209,
+      "num_embed_fail": 0,
+      "num_error": 0,
+      "overall_accuracy": 1.0,
+      "known_accuracy": 1.0,
+      "unknown_rejection_rate": 1.0,
+      "threshold": 0.3
+    },
+    {
+      "num_records": 915,
+      "num_valid": 706,
+      "num_detection_fail": 209,
+      "num_embed_fail": 0,
+      "num_error": 0,
+      "overall_accuracy": 0.9985835694050992,
+      "known_accuracy": 0.9984152139461173,
+      "unknown_rejection_rate": 1.0,
+      "threshold": 0.35
+    },
+    {
+      "num_records": 915,
+      "num_valid": 706,
+      "num_detection_fail": 209,
+      "num_embed_fail": 0,
+      "num_error": 0,
+      "overall_accuracy": 0.9985835694050992,
+      "known_accuracy": 0.9984152139461173,
+      "unknown_rejection_rate": 1.0,
+      "threshold": 0.4
+    },
+    {
+      "num_records": 915,
+      "num_valid": 706,
+      "num_detection_fail": 209,
+      "num_embed_fail": 0,
+      "num_error": 0,
+      "overall_accuracy": 0.9985835694050992,
+      "known_accuracy": 0.9984152139461173,
+      "unknown_rejection_rate": 1.0,
+      "threshold": 0.45
+    },
+    {
+      "num_records": 915,
+      "num_valid": 706,
+      "num_detection_fail": 209,
+      "num_embed_fail": 0,
+      "num_error": 0,
+      "overall_accuracy": 0.9943342776203966,
+      "known_accuracy": 0.993660855784469,
+      "unknown_rejection_rate": 1.0,
+      "threshold": 0.5
+    },
+    {
+      "num_records": 915,
+      "num_valid": 706,
+      "num_detection_fail": 209,
+      "num_embed_fail": 0,
+      "num_error": 0,
+      "overall_accuracy": 0.9858356940509915,
+      "known_accuracy": 0.9841521394611727,
+      "unknown_rejection_rate": 1.0,
+      "threshold": 0.55
+    },
+    {
+      "num_records": 915,
+      "num_valid": 706,
+      "num_detection_fail": 209,
+      "num_embed_fail": 0,
+      "num_error": 0,
+      "overall_accuracy": 0.9773371104815864,
+      "known_accuracy": 0.9746434231378764,
+      "unknown_rejection_rate": 1.0,
+      "threshold": 0.6
+    },
+    {
+      "num_records": 915,
+      "num_valid": 706,
+      "num_detection_fail": 209,
+      "num_embed_fail": 0,
+      "num_error": 0,
+      "overall_accuracy": 0.9475920679886686,
+      "known_accuracy": 0.9413629160063391,
+      "unknown_rejection_rate": 1.0,
+      "threshold": 0.65
+    },
+    {
+      "num_records": 915,
+      "num_valid": 706,
+      "num_detection_fail": 209,
+      "num_embed_fail": 0,
+      "num_error": 0,
+      "overall_accuracy": 0.9121813031161473,
+      "known_accuracy": 0.901743264659271,
+      "unknown_rejection_rate": 1.0,
+      "threshold": 0.7
+    }
+  ]
+}
