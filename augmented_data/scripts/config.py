@@ -9,11 +9,12 @@ import os
 # Root of the repository
 REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 
-# Input videos: Training_Videos/<Person>/*.mp4
-VIDEO_ROOT = os.path.join(REPO_ROOT, "..", "Training_Videos")
 
-# Output directory for cropped face images
-IMAGE_OUTPUT_ROOT = os.path.join(REPO_ROOT, "augmented_data", "training_images_augmented")
+# Input videos: Training_Videos_V2/<Person>/*.mp4
+VIDEO_ROOT = "/mlda/shreyas_projects/EE4228/Training_Videos_V2"
+
+# Output directory for cropped face images (V2)
+IMAGE_OUTPUT_ROOT = os.path.join(REPO_ROOT, "augmented_data", "training_images_augmented_v2")
 
 # ─── GPU / Model ─────────────────────────────────────────────────────────────
 # Which GPU to use for InsightFace face detection (0-indexed)
