@@ -1,0 +1,15 @@
+{
+  "split": "test",
+  "db": "C:\\Users\\main\\Frentzen\\Project\\ISD\\face_detection_ee4228\\project_2\\models\\mobilefacenet_insightface\\artifacts_mobilefacenet\\embeddings\\mobilefacenet_enroll.npz",
+  "threshold": 0.1,
+  "metrics": {
+    "num_records": 168,
+    "num_valid": 129,
+    "num_detection_fail": 39,
+    "num_embed_fail": 0,
+    "num_error": 0,
+    "overall_accuracy": 0.9844961240310077,
+    "known_accuracy": 0.9844961240310077,
+    "unknown_rejection_rate": null
+  }
+}

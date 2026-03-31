@@ -1,0 +1,32 @@
+# mobilefacenet_insightface dependencies
+#
+# These must be installed in the same environment as arcface_insightface.
+# The versions below match frentzen/frentzen/pyproject.toml — adjust if
+# your environment already has compatible versions.
+
+# Deep learning
+torch==2.10.0
+torchvision==0.25.0
+
+# Image processing
+opencv-python==4.13.0.92
+# Keep NumPy below 2.0 to match the older ArcFace/InsightFace stack used
+# elsewhere in this repo.
+numpy<2
+pillow==12.1.1
+
+# InsightFace (required by the shared FaceDetector in arcface_insightface)
+# PyPI serves insightface 0.7.3 as source for this Windows/Python 3.10 setup.
+# If pip tries to build it, Microsoft Visual C++ 14.0+ Build Tools are required.
+insightface==0.7.3
+onnxruntime>=1.15.0
+
+# ── mobilefacenet_face (local package) ───────────────────────────────────────
+# This package lives in the same repo. Install it once as an editable install:
+#
+#   pip install -e <repo_root>/frentzen/frentzen
+#
+# Example (from the ISD/ root):
+#   pip install -e frentzen/frentzen
+#
+# Do NOT add a file:// entry here — the path varies per machine.
