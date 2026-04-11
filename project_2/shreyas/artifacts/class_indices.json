@@ -1,0 +1,20 @@
+{
+  "class_to_index": {
+    "Abhiram": 0,
+    "Frentzen": 1,
+    "Jessica": 2,
+    "Ninad": 3,
+    "Ryan": 4,
+    "Sasi": 5,
+    "Shreyas": 6
+  },
+  "index_to_class": {
+    "0": "Abhiram",
+    "1": "Frentzen",
+    "2": "Jessica",
+    "3": "Ninad",
+    "4": "Ryan",
+    "5": "Sasi",
+    "6": "Shreyas"
+  }
+}

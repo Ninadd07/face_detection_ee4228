@@ -13,10 +13,12 @@ from keras_vggface_compat import patch_keras_for_vggface
 from vggface_config import (
     CLASS_INDEX_PATH,
     CONFIDENCE_THRESHOLD,
+    DATASET_DIR,
     DETECTION_SCALE,
     INPUT_SIZE,
     MODEL_PATH,
     PROCESS_EVERY_N_FRAMES,
+    REPO_ROOT,
 )
 
 
@@ -28,6 +30,31 @@ def load_label_map(class_index_path: Path) -> Dict[int, str]:
     with class_index_path.open("r", encoding="utf-8") as f:
         payload = json.load(f)
     return {int(k): v for k, v in payload["index_to_class"].items()}
+
+
+def resolve_dataset_dir(dataset_dir: Path) -> Path:
+    if dataset_dir.exists():
+        return dataset_dir
+    if not dataset_dir.is_absolute():
+        repo_candidate = REPO_ROOT / dataset_dir
+        if repo_candidate.exists():
+            return repo_candidate
+    return dataset_dir
+
+
+def build_label_map_from_dataset(dataset_dir: Path) -> Dict[int, str]:
+    class_dirs = sorted([p for p in dataset_dir.iterdir() if p.is_dir()])
+    return {idx: p.name for idx, p in enumerate(class_dirs)}
+
+
+def save_label_map(label_map: Dict[int, str], class_index_path: Path) -> None:
+    class_index_path.parent.mkdir(parents=True, exist_ok=True)
+    payload = {
+        "class_to_index": {name: idx for idx, name in label_map.items()},
+        "index_to_class": {str(idx): name for idx, name in label_map.items()},
+    }
+    with class_index_path.open("w", encoding="utf-8") as f:
+        json.dump(payload, f, indent=2)
 
 
 def preprocess_face(face_bgr: np.ndarray) -> np.ndarray:
@@ -86,15 +113,27 @@ def main() -> None:
     parser.add_argument("--confidence", type=float, default=CONFIDENCE_THRESHOLD)
     parser.add_argument("--detection-scale", type=float, default=DETECTION_SCALE)
     parser.add_argument("--process-every", type=int, default=PROCESS_EVERY_N_FRAMES)
+    parser.add_argument("--dataset-dir", type=Path, default=DATASET_DIR)
     args = parser.parse_args()
 
     if not args.model.exists():
         raise FileNotFoundError(f"Trained model not found: {args.model}")
-    if not args.class_map.exists():
-        raise FileNotFoundError(f"Class map not found: {args.class_map}")
 
     model = tf.keras.models.load_model(str(args.model), compile=False)
-    label_map = load_label_map(args.class_map)
+
+    if args.class_map.exists():
+        label_map = load_label_map(args.class_map)
+    else:
+        dataset_dir = resolve_dataset_dir(args.dataset_dir)
+        if not dataset_dir.exists():
+            raise FileNotFoundError(
+                f"Class map not found: {args.class_map} and dataset directory not found: {dataset_dir}"
+            )
+        label_map = build_label_map_from_dataset(dataset_dir)
+        if not label_map:
+            raise ValueError(f"No class folders found in dataset directory: {dataset_dir}")
+        save_label_map(label_map, args.class_map)
+        print(f"[live_webcam_vggface] Generated class map from dataset: {args.class_map}")
 
     face_cascade = cv2.CascadeClassifier(
         cv2.data.haarcascades + "haarcascade_frontalface_default.xml"

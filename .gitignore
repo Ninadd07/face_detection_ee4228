@@ -41,3 +41,6 @@ project_2/models/arcface_insightface/data/
 project_2/models/arcface_insightface/data_augmented/
 project_2/models/arcface_insightface/artifacts/embeddings/baseline_enroll.npz
 project_2/models/arcface_insightface/artifacts_augmented/embeddings/baseline_enroll.npzaugmented_data/training_images_augmented_v2/
+project_2/shreyas/artifacts/
+*.keras
+*.h5

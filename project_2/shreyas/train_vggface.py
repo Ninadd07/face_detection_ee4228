@@ -20,6 +20,7 @@ from vggface_config import (
     LEARNING_RATE,
     MODEL_PATH,
     RANDOM_SEED,
+    REPO_ROOT,
     VALIDATION_SPLIT,
 )
 
@@ -191,11 +192,23 @@ def main() -> None:
     parser.add_argument("--batch-size", type=int, default=BATCH_SIZE)
     args = parser.parse_args()
 
-    if not args.dataset_dir.exists():
-        raise FileNotFoundError(f"Dataset directory not found: {args.dataset_dir}")
+    dataset_dir = args.dataset_dir
+    if not dataset_dir.is_absolute() and not dataset_dir.exists():
+        # Make CLI usage robust from any working directory.
+        repo_candidate = REPO_ROOT / dataset_dir
+        if repo_candidate.exists():
+            dataset_dir = repo_candidate
+
+    if not dataset_dir.exists():
+        raise FileNotFoundError(
+            "Dataset directory not found: "
+            f"{args.dataset_dir}. "
+            "Try --dataset-dir ..\\..\\training_images_augmented "
+            "or run from repo root with --dataset-dir training_images_augmented."
+        )
 
     ARTIFACT_DIR.mkdir(parents=True, exist_ok=True)
-    _, eval_summary = train(args.dataset_dir, args.epochs, args.batch_size)
+    _, eval_summary = train(dataset_dir, args.epochs, args.batch_size)
 
     print("[train_vggface] Model saved:", MODEL_PATH)
     print("[train_vggface] Class map saved:", CLASS_INDEX_PATH)
