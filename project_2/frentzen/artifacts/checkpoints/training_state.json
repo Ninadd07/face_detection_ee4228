@@ -1,0 +1,17 @@
+{
+  "label_mapping": {
+    "Abhiram": 0,
+    "Frentzen": 1,
+    "Jessica": 2,
+    "Marcus": 3,
+    "Ninad": 4,
+    "Ryan": 5,
+    "Sasi": 6
+  },
+  "best_metric": 0.9881936245572609,
+  "selection_metric": "val_accuracy",
+  "epochs_completed": 15,
+  "pretrained_checkpoint_path": "C:\\Users\\main\\Frentzen\\Project\\ISD\\MobileFaceNet_Pytorch\\model\\best\\068.ckpt",
+  "best_checkpoint_path": "C:\\Users\\main\\Frentzen\\Project\\ISD\\frentzen\\frentzen\\artifacts\\checkpoints\\mobilefacenet_best.pth",
+  "last_checkpoint_path": "C:\\Users\\main\\Frentzen\\Project\\ISD\\frentzen\\frentzen\\artifacts\\checkpoints\\mobilefacenet_last.pth"
+}

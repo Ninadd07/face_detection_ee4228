@@ -1,0 +1,61 @@
+name: compact-mtcnn-mobilefacenet
+device: auto
+detector:
+  type: mtcnn
+  image_size: 160
+  margin: 0
+  min_face_size: 20
+  thresholds: [0.6, 0.7, 0.7]
+  factor: 0.709
+  post_process: false
+recognizer:
+  type: mobilefacenet
+  embedding_dim: 128
+  input_size: [112, 96]
+  checkpoint_path: C:/Users/main/Frentzen/Project/ISD/MobileFaceNet_Pytorch/model/best/068.ckpt
+preprocess:
+  cache_aligned_faces: true
+  aligned_dir: artifacts/aligned_faces
+  aligned_manifest: artifacts/aligned_faces/aligned_manifest.csv
+  overwrite: false
+matcher:
+  threshold: 0.35
+  top_k: 3
+  aggregation: mean
+data:
+  root_dir: training_images_augmented_v2
+  split_seed: 42
+  enrollment_ratio: 0.5
+  validation_ratio: 0.25
+  test_ratio: 0.25
+  group_pattern: "(vid\\d+_frame\\d+)"
+training:
+  output_dir: artifacts/checkpoints
+  best_checkpoint_path: artifacts/checkpoints/mobilefacenet_best.pth
+  last_checkpoint_path: artifacts/checkpoints/mobilefacenet_last.pth
+  training_state_path: artifacts/checkpoints/training_state.json
+  training_metrics_path: artifacts/reports/training_metrics.json
+  random_seed: 42
+  batch_size: 32
+  epochs: 20
+  warmup_epochs: 1
+  learning_rate: 0.0003
+  weight_decay: 0.0001
+  early_stopping_patience: 3
+  num_workers: 0
+  label_smoothing: 0.05
+  max_samples_per_group: 4
+  selection_metric: val_accuracy
+  augmentation:
+    horizontal_flip: true
+    color_jitter: true
+    random_erasing: false
+outputs:
+  split_manifest: artifacts/splits/compact_splits.csv
+  gallery_path: artifacts/galleries/compact_gallery.npz
+  metrics_path: artifacts/reports/compact_metrics.json
+  comparison_metrics_path: artifacts/reports/compact_comparison_metrics.json
+  benchmark_path: artifacts/reports/compact_benchmark.json
+  prediction_log_path: artifacts/reports/live_predictions.jsonl
+  failed_sources_path: artifacts/reports/aligned_failures.csv
+  failed_contact_sheet_path: artifacts/reports/aligned_failures_contact_sheet.jpg

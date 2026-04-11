@@ -1,0 +1,49 @@
+[build-system]
+requires = ["setuptools>=65", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mobilefacenet-face"
+version = "0.1.0"
+description = "Compact PyTorch face recognition benchmark pipeline."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "facenet-pytorch==2.5.3",
+  "matplotlib==3.10.8",
+  "numpy==2.2.6",
+  "opencv-python==4.13.0.92",
+  "pillow==12.1.1",
+  "psutil==7.2.2",
+  "PyYAML==6.0.3",
+  "scikit-learn==1.7.2",
+  "scipy==1.15.3",
+  "torch==2.10.0",
+  "torchvision==0.25.0",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest==9.0.2",
+]
+
+[project.scripts]
+mobilefacenet-audit = "mobilefacenet_face.cli.audit_dataset:main"
+mobilefacenet-split = "mobilefacenet_face.cli.create_splits:main"
+mobilefacenet-prepare = "mobilefacenet_face.cli.prepare_aligned:main"
+mobilefacenet-clean-failures = "mobilefacenet_face.cli.clean_failed_sources:main"
+mobilefacenet-train = "mobilefacenet_face.cli.train_mobilefacenet:main"
+mobilefacenet-enroll = "mobilefacenet_face.cli.enroll_gallery:main"
+mobilefacenet-evaluate = "mobilefacenet_face.cli.evaluate_compact:main"
+mobilefacenet-plot-training = "mobilefacenet_face.cli.plot_training:main"
+mobilefacenet-benchmark = "mobilefacenet_face.cli.benchmark_compact:main"
+mobilefacenet-live = "mobilefacenet_face.cli.live_demo:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

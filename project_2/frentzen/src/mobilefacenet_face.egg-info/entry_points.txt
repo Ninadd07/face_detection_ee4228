@@ -1,0 +1,11 @@
+[console_scripts]
+mobilefacenet-audit = mobilefacenet_face.cli.audit_dataset:main
+mobilefacenet-benchmark = mobilefacenet_face.cli.benchmark_compact:main
+mobilefacenet-clean-failures = mobilefacenet_face.cli.clean_failed_sources:main
+mobilefacenet-enroll = mobilefacenet_face.cli.enroll_gallery:main
+mobilefacenet-evaluate = mobilefacenet_face.cli.evaluate_compact:main
+mobilefacenet-live = mobilefacenet_face.cli.live_demo:main
+mobilefacenet-plot-training = mobilefacenet_face.cli.plot_training:main
+mobilefacenet-prepare = mobilefacenet_face.cli.prepare_aligned:main
+mobilefacenet-split = mobilefacenet_face.cli.create_splits:main
+mobilefacenet-train = mobilefacenet_face.cli.train_mobilefacenet:main

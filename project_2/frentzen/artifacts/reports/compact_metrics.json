@@ -1,0 +1,118 @@
+{
+  "samples": 1010,
+  "known_samples": 1010,
+  "unknown_samples": 0,
+  "top1_accuracy": 0.8940594059405941,
+  "precision_weighted": 0.9429436747792679,
+  "recall_weighted": 0.8940594059405941,
+  "f1_weighted": 0.9153169310559902,
+  "unknown_rejection_rate": null,
+  "false_accept_rate": null,
+  "false_reject_rate": 0.04257425742574258,
+  "average_latency_ms": 29.115322178230517,
+  "labels": [
+    "Abhiram",
+    "Frentzen",
+    "Jessica",
+    "Marcus",
+    "Ninad",
+    "Ryan",
+    "Sasi",
+    "unknown"
+  ],
+  "confusion_matrix": [
+    [
+      120,
+      0,
+      0,
+      0,
+      0,
+      7,
+      11,
+      4
+    ],
+    [
+      0,
+      139,
+      6,
+      0,
+      0,
+      1,
+      2,
+      8
+    ],
+    [
+      0,
+      0,
+      141,
+      0,
+      0,
+      0,
+      5,
+      4
+    ],
+    [
+      0,
+      4,
+      0,
+      130,
+      0,
+      0,
+      1,
+      5
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      126,
+      1,
+      14,
+      8
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      130,
+      8,
+      3
+    ],
+    [
+      0,
+      0,
+      1,
+      0,
+      0,
+      3,
+      117,
+      11
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  ],
+  "counts_by_identity": {
+    "Abhiram": 142,
+    "Frentzen": 156,
+    "Jessica": 150,
+    "Marcus": 140,
+    "Ninad": 149,
+    "Ryan": 141,
+    "Sasi": 132
+  },
+  "calibrated_threshold": 0.41500000000000004,
+  "checkpoint_path": "C:\\Users\\main\\Frentzen\\Project\\ISD\\MobileFaceNet_Pytorch\\model\\best\\068.ckpt",
+  "skipped_validation_missing": 42,
+  "skipped_test_missing": 49
+}

@@ -1,0 +1,449 @@
+Metadata-Version: 2.4
+Name: mobilefacenet-face
+Version: 0.1.0
+Summary: Compact PyTorch face recognition benchmark pipeline.
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+Requires-Dist: facenet-pytorch==2.5.3
+Requires-Dist: matplotlib==3.10.8
+Requires-Dist: numpy==2.2.6
+Requires-Dist: opencv-python==4.13.0.92
+Requires-Dist: pillow==12.1.1
+Requires-Dist: psutil==7.2.2
+Requires-Dist: PyYAML==6.0.3
+Requires-Dist: scikit-learn==1.7.2
+Requires-Dist: scipy==1.15.3
+Requires-Dist: torch==2.10.0
+Requires-Dist: torchvision==0.25.0
+Provides-Extra: dev
+Requires-Dist: pytest==9.0.2; extra == "dev"
+
+# Compact Face Recognition Benchmark
+
+## Technical Report Style Overview
+This repository implements a compact face-recognition system built around a classical modern pipeline:
+
+1. detect a face in an image
+2. align the face into a standard crop
+3. convert the aligned face into a numerical embedding
+4. compare that embedding against enrolled identities with cosine similarity
+
+The current implementation uses:
+
+- `MTCNN` for face detection and 5-point facial landmark extraction
+- landmark-based affine alignment to produce normalized face crops
+- `MobileFaceNet` for compact 128-dimensional face embeddings
+- gallery matching with cosine similarity instead of an SVM classifier
+- a package workflow for auditing, split generation, preprocessing, fine-tuning, enrollment, evaluation, benchmarking, and live demo inference
+
+The original notebook and earlier SVM artifacts remain in the repository as legacy references, but the intended path is the package-based workflow documented below.
+
+## Executive Summary
+The system is designed as a compact face-recognition benchmark rather than a large-scale production platform. Its goal is to let you take a folder of identity-labeled face images, prepare them consistently, fine-tune a lightweight recognizer, build a gallery of known people, and then measure or demonstrate recognition performance.
+
+For a beginner, the most important idea is this:
+
+- face detection answers: "where is the face?"
+- face alignment answers: "can I crop it into a consistent pose and size?"
+- face recognition answers: "which known identity is this face most similar to?"
+
+This repository separates those stages so they can be inspected, replaced, and evaluated independently.
+
+## System Objectives
+The current system is optimized for:
+
+- compact inference with `MobileFaceNet`
+- clear preprocessing and evaluation steps
+- reproducible experiments through config-driven commands
+- gallery-based recognition, where each known person is represented by one template embedding
+
+It is not trying to solve every face-recognition problem. In particular:
+
+- it does not perform 3D face frontalization
+- it does not reconstruct hidden facial regions
+- it does not use a classifier as the final recognition stage
+- it assumes the dataset already has identity labels organized by person
+
+## Project Layout
+```text
+.
+|-- configs/
+|   `-- compact_mtcnn_mobilefacenet.yaml
+|-- src/mobilefacenet_face/
+|   |-- cli/
+|   |-- detectors/
+|   |-- recognizers/
+|   `-- ...
+|-- tests/
+|-- face_recognition_live.py
+|-- face_recognition_training_pytorch.ipynb
+`-- training_images_augmented/
+```
+
+## System Architecture
+At a high level, the system operates as follows:
+
+```text
+Labeled image dataset
+    |
+    v
+Dataset audit and split generation
+    |
+    v
+Face detection + landmark extraction (MTCNN)
+    |
+    v
+Face alignment to a standard crop
+    |
+    v
+MobileFaceNet embedding extraction
+    |
+    +--> Fine-tuning path: train MobileFaceNet on aligned faces
+    |
+    +--> Enrollment path: build one embedding template per identity
+    |
+    v
+Cosine-similarity matching against enrolled identities
+    |
+    v
+Evaluation, benchmarking, or live webcam inference
+```
+
+### Main Components
+- `detector`: finds faces and returns bounding boxes plus five landmarks
+- `aligner`: uses those landmarks to warp each face into a fixed-size normalized crop
+- `embedder`: converts each aligned crop into a 128-dimensional vector
+- `gallery`: stores one template vector per known identity
+- `matcher`: compares a query embedding to gallery embeddings using cosine similarity and accepts a match only if the score exceeds a threshold
+
+## Recognition Strategy
+This repository uses template matching, not closed-set classification, as the final recognition stage.
+
+That means the trained model is not asked to output a direct class label such as `"Jessica"` or `"Ryan"` at inference time. Instead:
+
+1. each aligned face is converted into an embedding vector
+2. embeddings from enrollment images are averaged per identity to form a gallery template
+3. a query face is embedded and compared to those templates
+4. the highest cosine-similarity score is selected
+5. the identity is accepted only if the score exceeds a threshold
+
+This design is useful because it keeps the system modular and closer to many practical face-recognition pipelines.
+
+## Dataset Assumptions
+The code expects a directory of identity-labeled images under `training_images_augmented/`, with one folder per person.
+
+The split generator also uses a `group_id` derived from the filename, usually something like `vid0_frame00120`. This matters because images from the same source frame or short sequence should stay together in the same split. Without grouping, nearly identical images could leak across training, validation, and test, which would produce unrealistically optimistic results.
+
+## Setup
+Run setup from the repository root:
+
+```powershell
+cd C:\Users\main\Frentzen\Project\ISD\frentzen\frentzen
+```
+
+Create and activate the project-local virtual environment, then install the package in editable mode:
+
+```powershell
+python -m venv venv
+.\venv\Scripts\activate
+python -m pip install -e .[dev]
+```
+
+All `mobilefacenet-*` commands in this README assume you are still in this same directory with this `venv` activated. The commands are installed into `.\venv\Scripts\`.
+
+## MobileFaceNet Weights
+Add the pretrained MobileFaceNet checkpoint path in `configs/compact_mtcnn_mobilefacenet.yaml`:
+
+```yaml
+recognizer:
+  checkpoint_path: path/to/mobilefacenet_checkpoint.pth
+```
+
+Example:
+
+```yaml
+recognizer:
+  type: mobilefacenet
+  embedding_dim: 128
+  input_size: [112, 96]
+  checkpoint_path: C:/Users/main/Frentzen/Project/ISD/MobileFaceNet_Pytorch/model/best/068.ckpt
+```
+
+The vendored model is aligned to the `Xiaoccer/MobileFaceNet_Pytorch` checkpoint family, so the default recognizer expects 128-dimensional embeddings from `112x96` aligned face crops. The checkpoint itself is intentionally external to the repository.
+
+If `checkpoint_path` is left as `null`, the code still runs structurally for tests and integration work, but recognition accuracy numbers are not meaningful until a real MobileFaceNet checkpoint is supplied.
+
+## End-to-End Workflow
+This section explains not just which command to run, but what each stage is doing in face-recognition terms.
+
+### 1. Audit the dataset
+```powershell
+mobilefacenet-audit
+```
+
+What this does:
+
+- scans the dataset root for image files
+- counts how many images exist per identity
+- hashes an initial subset of files to look for exact duplicates
+
+Why it matters:
+
+- recognition systems are only as good as their data
+- class imbalance can make some identities much easier to learn than others
+- duplicate images can inflate performance if they appear repeatedly
+
+Use this step first to answer: "Do I actually have a sensible dataset to train and evaluate on?"
+
+### 2. Create enrollment / validation / test splits
+```powershell
+mobilefacenet-split
+```
+
+What this does:
+
+- reads all labeled images
+- groups related files using a `group_id` derived from the filename
+- assigns groups, not just individual files, into `enrollment`, `validation`, and `test`
+- writes the split manifest to `artifacts/splits/compact_splits.csv`
+
+Why it matters:
+
+- `enrollment` is the set used to build known-identity templates and also serves as the training split for fine-tuning in this project
+- `validation` is used to tune the cosine-similarity threshold
+- `test` is held out for final performance reporting
+
+For a beginner, this is one of the most important concepts in the repository: the system tries to avoid data leakage by splitting at the group level, not only at the image level.
+
+### 3. Prepare aligned face crops
+```powershell
+mobilefacenet-prepare
+```
+
+What this does:
+
+- loads each image from the split manifest
+- detects faces with `MTCNN`
+- extracts five landmarks for each detected face
+- picks the highest-confidence face when multiple faces are found
+- warps the face to a standard landmark template
+- saves the aligned crop under `artifacts/aligned_faces/`
+
+What "aligned face" means here:
+
+- the face is not made magically frontal
+- the code performs a 2D affine warp so eyes, nose, and mouth land in roughly consistent positions
+- this reduces nuisance variation caused by translation, scale, slight rotation, and mild pose differences
+
+Why it matters:
+
+- embedding models are easier to train and more stable when faces are normalized before feature extraction
+- recognition quality usually degrades if the model sees wildly inconsistent crops
+
+Failure handling:
+
+- missed or failed detections are written to `artifacts/reports/aligned_failures.csv`
+- those failed source images are also previewed in `artifacts/reports/aligned_failures_contact_sheet.jpg`
+
+This is often the best place to inspect data quality problems such as bad crops, extreme pose, blur, or occlusion.
+
+### 4. Optionally remove failed source images
+```powershell
+mobilefacenet-clean-failures
+mobilefacenet-clean-failures --apply
+```
+
+What this does:
+
+- reads the failure report produced during aligned-face preparation
+- identifies source images that repeatedly failed
+- optionally deletes them when `--apply` is used
+
+Why it matters:
+
+- some datasets contain unusable frames with no detectable face
+- keeping too many unusable examples increases noise in the pipeline
+
+The first command is a dry run. `--apply` actually deletes the failed source images listed in `artifacts/reports/aligned_failures.csv`.
+
+### 5. Fine-tune MobileFaceNet
+```powershell
+mobilefacenet-train
+```
+
+What this does:
+
+- loads the aligned-face manifest
+- keeps only successful aligned crops
+- builds a training dataset from the `enrollment` split
+- builds a validation dataset from the `validation` split
+- loads a pretrained `MobileFaceNet` checkpoint
+- attaches a normalized classification head for supervised training
+- fine-tunes the backbone using cross-entropy loss
+- saves `best` and `last` checkpoints plus training metadata
+
+Why it matters:
+
+- the pretrained checkpoint gives the model a useful starting representation
+- fine-tuning adapts the embedding space to your identities and capture conditions
+- validation accuracy and validation loss are tracked to decide when training has improved
+
+Important detail:
+
+- even though the final system does gallery matching, the fine-tuning stage still uses supervised identity labels to improve the embedding backbone
+
+Plot the training curves after training:
+
+```powershell
+mobilefacenet-plot-training
+```
+
+This reads the stored training metrics and writes a plot of training and validation loss and accuracy over time.
+
+### 6. Build the embedding gallery from enrollment images
+```powershell
+mobilefacenet-enroll
+```
+
+What this does:
+
+- re-runs the recognition pipeline over the `enrollment` images
+- extracts one embedding per successfully processed face
+- groups embeddings by identity
+- averages embeddings per identity to build a single template vector
+- L2-normalizes the template vectors
+- saves the gallery to `artifacts/galleries/compact_gallery.npz`
+
+Why it matters:
+
+- the gallery is the reference database of known people
+- during inference, every query face is compared against this gallery
+
+For a beginner: this is the stage where the system learns what each known person "looks like" in embedding space.
+
+### 7. Evaluate on validation / test
+```powershell
+mobilefacenet-evaluate
+```
+
+What this does:
+
+- rebuilds the gallery from `enrollment`
+- runs recognition on `validation`
+- calibrates the similarity threshold by searching for the threshold with the best validation F1 score
+- runs final recognition on `test` using that calibrated threshold
+- writes a metrics report to `artifacts/reports/compact_metrics.json`
+
+What the main reported metrics mean:
+
+- `top1_accuracy`: how often the top accepted identity is correct
+- `precision_weighted`, `recall_weighted`, `f1_weighted`: class-aware recognition metrics across identities
+- `false_reject_rate`: how often a known face is not accepted
+- `average_latency_ms`: average end-to-end runtime per sample
+- `confusion_matrix`: which identities are being confused with which others
+
+Why it matters:
+
+- a raw similarity score by itself is not enough
+- threshold calibration determines when the system should say "this is Ryan" versus "unknown"
+
+### 8. Benchmark latency
+```powershell
+mobilefacenet-benchmark --limit 50
+```
+
+What this does:
+
+- loads up to `50` test images by default
+- runs the full pipeline on them
+- measures timing for practical throughput analysis
+- writes a benchmark report to `artifacts/reports/compact_benchmark.json`
+
+Why it matters:
+
+- accuracy alone is not enough for a compact recognizer
+- this project is explicitly interested in the cost of detection, alignment, embedding, and matching
+
+### 9. Run the webcam demo
+```powershell
+mobilefacenet-live
+```
+
+What this does:
+
+- opens the webcam
+- detects and aligns faces frame by frame
+- extracts embeddings
+- compares them to the enrolled gallery
+- draws a bounding box and label for the best accepted identity, or `unknown`
+- logs predictions and timing data to `artifacts/reports/live_predictions.jsonl`
+
+Why it matters:
+
+- this is the closest step to real deployment behavior
+- it lets you observe how lighting, pose, distance, and motion affect recognition in practice
+
+You can also keep using:
+
+```powershell
+python face_recognition_live.py
+```
+
+That legacy entry point now delegates to the package-based live demo.
+
+## Outputs
+By default the compact config writes:
+
+- aligned faces: `artifacts/aligned_faces/`
+- best checkpoint: `artifacts/checkpoints/mobilefacenet_best.pth`
+- last checkpoint: `artifacts/checkpoints/mobilefacenet_last.pth`
+- training state: `artifacts/checkpoints/training_state.json`
+- training metrics: `artifacts/reports/training_metrics.json`
+- training curves plot: `artifacts/reports/training_curves.png`
+- split manifest: `artifacts/splits/compact_splits.csv`
+- gallery: `artifacts/galleries/compact_gallery.npz`
+- metrics report: `artifacts/reports/compact_metrics.json`
+- comparison metrics report: `artifacts/reports/compact_comparison_metrics.json`
+- benchmark report: `artifacts/reports/compact_benchmark.json`
+- live prediction log: `artifacts/reports/live_predictions.jsonl`
+- failed-source report: `artifacts/reports/aligned_failures.csv`
+- failed-image contact sheet: `artifacts/reports/aligned_failures_contact_sheet.jpg`
+
+## How the Pieces Fit Together
+If you are learning face recognition, the most useful mental model for this repository is:
+
+- the detector decides where the face is
+- the aligner standardizes the crop
+- the embedder converts the face into a compact vector representation
+- the gallery stores reference vectors for known identities
+- the matcher makes the final recognition decision using cosine similarity and a threshold
+
+In other words, the system is not recognizing faces directly from raw images. It is recognizing faces by comparing learned vector representations of aligned facial crops.
+
+## Current Configuration Summary
+The default config in `configs/compact_mtcnn_mobilefacenet.yaml` currently specifies:
+
+- `MTCNN` as the detector
+- `MobileFaceNet` with `128`-dimensional embeddings
+- aligned input size of `112x96`
+- cosine-similarity matching with a default threshold of `0.35`
+- group-based dataset splits rooted at `training_images_augmented/`
+
+## Limitations and Interpretation Notes
+- `MTCNN` is still the current detector bootstrap. It is separated behind a detector interface so it can be replaced later without changing the recognizer or evaluation stack.
+- The alignment stage is a 2D affine normalization step, not full frontalization.
+- Fine-tuning requires `recognizer.checkpoint_path` to point at a valid pretrained MobileFaceNet checkpoint.
+- The current config is set up for the Xiaoccer checkpoint at `C:/Users/main/Frentzen/Project/ISD/MobileFaceNet_Pytorch/model/best/068.ckpt`.
+- The old SVM artifacts (`svm_classifier.pkl`, `label_encoder.pkl`) are no longer part of the main evaluation path.
+
+## Suggested Reading Order for Beginners
+If you are new to face recognition, use the project in this order:
+
+1. Read `Technical Report Style Overview`, `System Architecture`, and `Recognition Strategy`.
+2. Run `mobilefacenet-audit` and inspect the dataset before training anything.
+3. Run `mobilefacenet-split` and understand the role of `enrollment`, `validation`, and `test`.
+4. Run `mobilefacenet-prepare` and manually inspect aligned outputs and failed detections.
+5. Fine-tune the recognizer with `mobilefacenet-train`.
+6. Build the gallery with `mobilefacenet-enroll`.
+7. Evaluate with `mobilefacenet-evaluate` before trusting live-demo behavior.
+8. Use `mobilefacenet-live` only after the offline metrics make sense.
